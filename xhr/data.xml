@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<securityPreps>
+	<item class="PREPS">
+		<secSitBI>Yes</secSitBI>
+		<secSitBO>Yes</secSitBO>
+		<securityWeaponType>Small Caliber Pistol/Rifle</securityWeaponType>
+		<securityManufacturer>Ruger</securityManufacturer>
+		<securityModel>10/22</securityModel>
+		<securityCaliber>.22 LR</securityCaliber>
+		<securityAmmo>2000</securityAmmo>
+		<securityPod>Yes</securityPod>
+		<securityScope>Scope: No</securityScope>
+		<securityRedDot>Yes</securityRedDot>
+		<securityLaser>Yes</securityLaser>
+		<securitySling>Yes</securitySling>
+		<securityNotes>Tactical Stock</securityNotes>
+	</item>
+	<item class="PREPS">
+		<secSitBI>No</secSitBI>
+		<secSitBO>Yes</secSitBO>
+		<securityWeaponType>Small Caliber Pistol/Rifle</securityWeaponType>
+		<securityManufacturer>Marlin</securityManufacturer>
+		<securityModel>795</securityModel>
+		<securityCaliber>.22 LR</securityCaliber>
+		<securityAmmo>2500</securityAmmo>
+		<securityPod>Yes</securityPod>
+		<securityScope>Yes</securityScope>
+		<securityRedDot>No</securityRedDot>
+		<securityLaser>No</securityLaser>
+		<securitySling>Yes</securitySling>
+		<securityNotes>Thumb Hole Stock</securityNotes>
+	</item>
+	<item class="PREPS">
+		<secSitBI>Yes</secSitBI>
+		<secSitBO>Yes</secSitBO>
+		<securityWeaponType>Large Caliber Pistol/Rifle</securityWeaponType>
+		<securityManufacturer>Taurus</securityManufacturer>
+		<securityModel>Public Defender</securityModel>
+		<securityCaliber>.45/.410</securityCaliber>
+		<securityAmmo>100</securityAmmo>
+		<securityPod>No</securityPod>
+		<securityScope>No</securityScope>
+		<securityRedDot>No</securityRedDot>
+		<securityLaser>No</securityLaser>
+		<securitySling>No</securitySling>
+		<securityNotes>Notes: </securityNotes>
+	</item>
+	<item class="PREPS">
+		<secSitBI>Yes</secSitBI>
+		<secSitBO>No</secSitBO>
+		<securityWeaponType>Shotgun</securityWeaponType>
+		<securityManufacturer>Remington</securityManufacturer>
+		<securityModel>870 Express Tactical</securityModel>
+		<securityCaliber>12 gauge</securityCaliber>
+		<securityAmmo>50</securityAmmo>
+		<securityPod>No</securityPod>
+		<securityScope>No</securityScope>
+		<securityRedDot>No</securityRedDot>
+		<securityLaser>No</securityLaser>
+		<securitySling>Yes</securitySling>
+		<securityNotes>Home Defense</securityNotes>
+	</item>
+	<item class="PREPS">
+		<secSitBI>No</secSitBI>
+		<secSitBO>Yes</secSitBO>
+		<securityWeaponType>Large Caliber Pistol/Rifle</securityWeaponType>
+		<securityManufacturer>Remington</securityManufacturer>
+		<securityModel>700</securityModel>
+		<securityCaliber>30-06</securityCaliber>
+		<securityAmmo>100</securityAmmo>
+		<securityPod>No</securityPod>
+		<securityScope>Yes</securityScope>
+		<securityRedDot>No</securityRedDot>
+		<securityLaser>No</securityLaser>
+		<securitySling>Yes</securitySling>
+		<securityNotes>Notes: </securityNotes>
+	</item>
+	<item class="PREPS">
+		<secSitBI name="BI">No</secSitBI>
+		<secSitBO>Yes</secSitBO>
+		<securityWeaponType>Small Caliber Pistol/Rifle</securityWeaponType>
+		<securityManufacturer>Remington</securityManufacturer>
+		<securityModel>597</securityModel>
+		<securityCaliber>.22 LR</securityCaliber>
+		<securityAmmo>2000</securityAmmo>
+		<securityPod>No</securityPod>
+		<securityScope>es</securityScope>
+		<securityRedDot>No</securityRedDot>
+		<securityLaser>No</securityLaser>
+		<securitySling>No</securitySling>
+		<securityNotes>Plinking Rifle</securityNotes>
+	</item>
+	<item class="PREPS">
+		<secSitBI>Yes</secSitBI>
+		<secSitBO>Yes</secSitBO>
+		<securityWeaponType>Large Caliber Pistol/Rifle</securityWeaponType>
+		<securityManufacturer>Mossberg</securityManufacturer>
+		<securityModel>464 SPX</securityModel>
+		<securityCaliber>30-30</securityCaliber>
+		<securityAmmo>Amount of Ammo: 80</securityAmmo>
+		<securityPod>No</securityPod>
+		<securityScope>No</securityScope>
+		<securityRedDot>Yes</securityRedDot>
+		<securityLaser>Yes</securityLaser>
+		<securitySling>Yes</securitySling>
+		<securityNotes></securityNotes>
+	</item>
+	<item class="PREPS">
+		<secSitBI>No</secSitBI>
+		<secSitBO>Yes</secSitBO>
+		<securityWeaponType>Large Caliber Pistol/Rifle</securityWeaponType>
+		<securityManufacturer>Mossberg</securityManufacturer>
+		<securityModel>ATR Night Train</securityModel>
+		<securityCaliber>.308</securityCaliber>
+		<securityAmmo>100</securityAmmo>
+		<securityPod>Yes</securityPod>
+		<securityScope>Yes</securityScope>
+		<securityRedDot>No</securityRedDot>
+		<securityLaser>No</securityLaser>
+		<securitySling>No</securitySling>
+		<securityNotes></securityNotes>
+	</item>
+	<item class="PREPS">
+		<secSitBI>Yes</secSitBI>
+		<secSitBO>No</secSitBO>
+		<securityWeaponType>Shotgun</securityWeaponType>
+		<securityManufacturer>Mossberg</securityManufacturer>
+		<securityModel>Hunter</securityModel>
+		<securityCaliber>12 gauge</securityCaliber>
+		<securityAmmo>50</securityAmmo>
+		<securityPod>No</securityPod>
+		<securityScope>No</securityScope>
+		<securityRedDot>No</securityRedDot>
+		<securityLaser>No</securityLaser>
+		<securitySling>No</securitySling>
+		<securityNotes>Over and Under Double Barrel</securityNotes>
+	</item>
+	<item class="PREPS">
+		<secSitBI>No</secSitBI>
+		<secSitBO>Yes</secSitBO>
+		<securityWeaponType>Compound Bow/Crossbow</securityWeaponType>
+		<securityManufacturer>PSE</securityManufacturer>
+		<securityModel>Rally</securityModel>
+		<securityCaliber>Arrows</securityCaliber>
+		<securityAmmo>12</securityAmmo>
+		<securityPod>No</securityPod>
+		<securityScope>No</securityScope>
+		<securityRedDot>No</securityRedDot>
+		<securityLaser>No</securityLaser>
+		<securitySling>No</securitySling>
+		<securityNotes></securityNotes>
+	</item>
+</securityPreps>

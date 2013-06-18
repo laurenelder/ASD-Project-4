@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<!-- Devin "Lauren" Elder -->
+<!-- ASD Term 1303 -->
+<!-- ASD Application -->
+<!-- 06/16/2013 -->
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="description" content="Keep track of all your survival preparations" />
+		<meta name="keywords" content="preparations, prepper, survival" />
+		<meta name="robots" content="index, nofollow" />
+		<meta name="HandheldFriendly" content="True" />
+		<meta name="MobileOptimized" content="320" />
+		<meta name="viewport" content="user-scalable=no, width=device-width" />
+		<title>Survival Setup</title>
+		<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/et2.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/css.css" />
+	</head>
+	<body>
+
+		<!-- Home Page -->
+		<div data-role="page" id="homePage">
+			<div data-role="header" data-position="fixed">
+				<h1>Survival Setup</h1>
+			</div>
+			<section>
+				<br>
+				<a href="#securityPage" class="clickable"><img src="css/images/images/cta.png"></a>
+				<br>
+			</section>
+			<section class="clickable">
+				<h3>Display Preparations By...</h3>
+					<div class="ui-grid-a">
+						<div class="ui-block-a">
+							<a href="#Setup" data-role="button" id="displayBugIn"><strong><img src="css/images/images/bugIn.png"><br>Bug In<br>Preps</strong></a>
+						</div>
+						<div class="ui-block-b">
+							<a href="#Setup" data-role="button" id="displayBugOut"><strong><img src="css/images/images/bugOut.png"><br>Bug Out<br>Preps</strong></a>
+						</div>
+					</div>
+			</section>
+			<section>
+				<a href="#aboutPage" data-role="button" class="clickable">About Page</a>
+			</section>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar" class="nav">
+					<ul>
+						<li>
+							<a href="#homePage" data-icon="home" class="ui-btn-active" >Home<br>Page</a>
+						</li>
+						<li>
+							<a href="#securityPage" id="SecurityPage" data-icon="plus">Add a<br>Prep</a>
+						</li>
+						<li>
+							<a href="#aboutPage" data-icon="info">About<br>Page</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- Security Page -->
+		<div data-role="page" id="securityPage">
+			<div data-role="header" data-position="fixed">
+				<h1>Survival Setup</h1>
+			</div>
+			<form action="" id="securityForm"  class="clickable">
+				<section>
+					<ul class="securityForm" id="errors"></ul>
+				</section>
+				<section>
+					<div data-role="fieldcontain">
+						<label for="securityWeaponType">Weapon Type:</label>
+						<select name="securityWeapType" id="securityWeaponType">
+							<option value="Choose a Type" id="dflt">Choose a Type</option>
+							<option value="Traditional Bow/Crossbow">Traditional Bow/Crossbow</option>
+							<option value="Compound Bow/Crossbow">Compound Bow/Crossbow</option>
+							<option value="Air Gun">Air Gun</option>
+							<option value="Small Caliber Pistol/Rifle">Small Caliber Pistol/Rifle</option>
+							<option value="Large Caliber Pistol/Rifle">Large Caliber Pistol/Rifle</option>
+							<option value="Assault Rifle">Assault Rifle</option>
+							<option value="Shotgun">Shotgun</option>
+						</select>
+					</div>
+					<div data-role="fieldcontain">
+						<label for="securityManufacturer">Manufacturer:</label>
+						<input type="text" id="securityManufacturer" value="" style="" />
+					</div>
+					<div data-role="fieldcontain">
+						<label for="securityModel">Model:</label>
+						<input type="text" id="securityModel" value="" style="" />
+					</div>
+					<div data-role="fieldcontain">
+						<label for="securityCaliber">Caliber:</label>
+						<input type="text" id="securityCaliber" value="" style="" />
+					</div>
+					<div data-role="fieldcontain">
+						<label for="securityAmmo">Amount of Ammo:</label>
+						<input type="text" id="securityAmmo" value="" style="" />
+					</div>
+					<div data-role="fieldcontain">
+						<fieldset data-role="controlgroup">
+							<legend>Check Which Situations Apply...</legend>
+							<input type="checkbox" value="No" name="checkbox" id="secSitBI" />
+							<label for="secSitBI">Bug In:</label>
+							<input type="checkbox" value="No" name="checkbox" id="secSitBO" />
+							<label for="secSitBO">Bug Out:</label>
+						</fieldset>
+					</div>
+					<div data-role="fieldcontain">
+						<fieldset data-role="controlgroup">
+							<legend>Check All Accessories That Apply...</legend>
+							<input type="checkbox" value="No" name="checkbox" id="securityPod" />
+							<label for="securityPod">Bipod/Tripod:</label>
+							<input type="checkbox" value="No" name="checkbox" id="securityScope" />
+							<label for="securityScope">Scope:</label>
+							<input type="checkbox" value="No" name="checkbox" id="securityRedDot" />
+							<label for="securityRedDot">Red-Dot Scope:</label>
+							<input type="checkbox" value="No" name="checkbox" id="securityLaser" />
+							<label for="securityLaser">Laser:</label>
+							<input type="checkbox" value="No" name="checkbox" id="securitySling" />
+							<label for="securitySling">Sling:</label>
+						</fieldset>
+					</div>
+					<div data-role="fieldcontain">
+						<label for="securityNotes">Notes:</label>
+						<textarea id="securityNotes"></textarea>
+					</div>
+				</section>
+				<section>
+					<a href="#homePage" type="submit" id="securitySubmit" data-role="button" style="font-style:bold"><strong>Save Prep</strong></a>
+					<a href="#homePage" id="securityCancel" data-role="button">Cancel</a>
+				</section>
+			</form>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar" class="nav">
+					<ul>
+						<li>
+							<a href="#homePage" data-icon="home">Home<br>Page</a>
+						</li>
+						<li>
+							<a href="#securityPage" id="SecurityPage" data-icon="plus" class="ui-btn-active">Add a<br>Prep</a>
+						</li>
+						<li>
+							<a href="#aboutPage" data-icon="info">About<br>Page</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- Display Setup -->
+		<div data-role="page" id="Setup">
+			<div data-role="header" data-position="fixed">
+				<h1>Survival Setup</h1>
+			</div>
+			<section>
+				<h3 id="resultsHeader"></h3>
+				<a href="#homePage" data-role="button" id="clearLoc1" class="clickable">Clear All Preps</a>
+				<ul class="results"></ul>
+			</section>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar" class="nav">
+					<ul>
+						<li>
+							<a href="#homePage" data-icon="home">Home<br>Page</a>
+						</li>
+						<li>
+							<a href="#securityPage" id="SecurityPage" data-icon="plus">Add a<br>Prep</a>
+						</li>
+						<li>
+							<a href="#aboutPage" data-icon="info">About<br>Page</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- About Page -->
+		<div data-role="page" id="aboutPage">
+			<div data-role="header" data-position="fixed">
+				<h1>Survival Setup</h1>
+			</div>
+			<section>
+				<h3>About this Application...</h3>
+				<p>This application is intended to help preppers and survivalists keep track of their stored preparations. Updates will include fire preparations, food preparations, water preparations, and shelter preparations.</p>
+			</section>
+			<section>
+				<button id="addJSON" class="clickable">Load JSON Data</button>
+				<button id="addXML" class="clickable">Load XML Data</button>
+			</section>
+			<div data-role="footer" data-position="fixed">
+				<div data-role="navbar" class="nav">
+					<ul>
+						<li>
+							<a href="#homePage" data-icon="home">Home<br>Page</a>
+						</li>
+						<li>
+							<a href="#securityPage" id="SecurityPage" data-icon="plus">Add a<br>Prep</a>
+						</li>
+						<li>
+							<a href="#aboutPage" data-icon="info" class="ui-btn-active">About<br>Page</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery.mobile-1.3.1.min.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+	</body>
+</html>
