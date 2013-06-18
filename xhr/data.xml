@@ -84,7 +84,7 @@
 		<securityCaliber>.22 LR</securityCaliber>
 		<securityAmmo>2000</securityAmmo>
 		<securityPod>No</securityPod>
-		<securityScope>es</securityScope>
+		<securityScope>Yes</securityScope>
 		<securityRedDot>No</securityRedDot>
 		<securityLaser>No</securityLaser>
 		<securitySling>No</securitySling>
