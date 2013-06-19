@@ -50,14 +50,34 @@ $('#aboutPage').on('pageinit', function() {
 	});
 	$('#addJSON').click(function() {
 		$.ajax({
-			url		: 'xhr/data.json',
+			url		: '_view/preps',
 			type 	: 'GET',
 			dataType: 'json',
 			success : function(data, textStatus) {
+				$.each(data.rows, function(index, preps) {
+					console.log(preps.value);
+					var	JSONitem					= {};
+					JSONitem.secSitBI				= [preps.value.secSitBI[0], preps.value.secSitBI[1]];
+					JSONitem.secSitBO				= [preps.value.secSitBO[0], preps.value.secSitBO[1]];
+					JSONitem.securityWeaponType		= [preps.value.securityWeaponType[0], preps.value.securityWeaponType[1]];
+					JSONitem.securityManufacturer	= [preps.value.securityManufacturer[0], preps.value.securityManufacturer[1]];
+					JSONitem.securityModel			= [preps.value.securityModel[0], preps.value.securityModel[1]];
+					JSONitem.securityCaliber		= [preps.value.securityCaliber[0], preps.value.securityCaliber[1]];
+					JSONitem.securityAmmo			= [preps.value.securityAmmo[0], preps.value.securityAmmo[1]];
+					JSONitem.securityPod			= [preps.value.securityPod[0], preps.value.securityPod[1]];
+					JSONitem.securityScope			= [preps.value.securityScope[0], preps.value.securityScope[1]];
+					JSONitem.securityRedDot			= [preps.value.securityRedDot[0], preps.value.securityRedDot[1]];
+					JSONitem.securityLaser			= [preps.value.securityLaser[0], preps.value.securityLaser[1]];
+					JSONitem.securitySling			= [preps.value.securitySling[0], preps.value.securitySling[1]];
+					JSONitem.securityNotes			= [preps.value.securityNotes[0], preps.value.securityNotes[1]];
+					window.localStorage.setItem(index , JSON.stringify(JSONitem));
+				});
+				/*
 				for (var n in data) {
 					var id = Math.floor(Math.random() * 1000001);
 					window.localStorage.setItem(id, JSON.stringify(data[n]));
 				};
+				*/
 				alert("JSON Loaded");
 			}
 		});
