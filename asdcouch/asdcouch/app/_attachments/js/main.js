@@ -56,7 +56,7 @@ $('#aboutPage').on('pageinit', function() {
 			success : function(data, textStatus) {
 				$.each(data.rows, function(index, preps) {
 					console.log(preps.value);
-					var JSONkey = preps.value.JSONKEY[1];
+					var JSONkey = preps.value.JSONKEY;
 					var	JSONitem					= {};
 					JSONitem.secSitBI				= [preps.value.secSitBI[0], preps.value.secSitBI[1]];
 					JSONitem.secSitBO				= [preps.value.secSitBO[0], preps.value.secSitBO[1]];
@@ -181,7 +181,7 @@ var displayData = function(cat) {
 		var value = window.localStorage.getItem(key);
 		var obj = JSON.parse(value);
 		var liID = 1111 + (i);
-		var ulID = "" + key + "";
+		var ulID = key;
 		$(".results").append('<li id="' + liID + '">' + obj.securityManufacturer[1] + ' - ' + obj.securityModel[1] + '</li>');
 		$("#" + liID + "").append("<ul id=" + ulID + "></ul>");
 		if (obj.secSitBI[1] == "Yes" && cat == "Bug In" || obj.secSitBO[1] == "Yes" && cat == "Bug Out" || obj.secSitBI[1] == "Yes" && obj.secSitBO[1] == "Yes") {
