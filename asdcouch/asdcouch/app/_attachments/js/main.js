@@ -56,6 +56,7 @@ $('#aboutPage').on('pageinit', function() {
 			success : function(data, textStatus) {
 				$.each(data.rows, function(index, preps) {
 					console.log(preps.value);
+					var JSONkey = preps.value.JSONKEY[1];
 					var	JSONitem					= {};
 					JSONitem.secSitBI				= [preps.value.secSitBI[0], preps.value.secSitBI[1]];
 					JSONitem.secSitBO				= [preps.value.secSitBO[0], preps.value.secSitBO[1]];
@@ -70,48 +71,9 @@ $('#aboutPage').on('pageinit', function() {
 					JSONitem.securityLaser			= [preps.value.securityLaser[0], preps.value.securityLaser[1]];
 					JSONitem.securitySling			= [preps.value.securitySling[0], preps.value.securitySling[1]];
 					JSONitem.securityNotes			= [preps.value.securityNotes[0], preps.value.securityNotes[1]];
-					window.localStorage.setItem(index , JSON.stringify(JSONitem));
+					window.localStorage.setItem(JSONkey, JSON.stringify(JSONitem));
 				});
-				/*
-				for (var n in data) {
-					var id = Math.floor(Math.random() * 1000001);
-					window.localStorage.setItem(id, JSON.stringify(data[n]));
-				};
-				*/
 				alert("JSON Loaded");
-			}
-		});
-		return false;
-	});
-	$('#addXML').click(function() {
-		$.ajax({
-			url		: 'xhr/data.xml',
-			type 	: 'GET',
-			dataType: 'xml',
-			success : function(data, textStatus) {
-				var items = $(data);
-				items.find("item").each(function() {
-					var id = Math.floor(Math.random() * 1000001);
-				    var item = $(this);
-				    //var VALUE = $(item).find("secSitBI").text();
-				   // console.log(VALUE);
-				    var	XMLitem					= {};
-					XMLitem.secSitBI				= ["Bug In Weapon: ", $(item).find("secSitBI").text()];
-					XMLitem.secSitBO				= ["Bug Out Weapon: ", $(item).find("secSitBO").text()];
-					XMLitem.securityWeaponType		= ["Weapon Type: ", $(item).find("securityWeaponType").text()];
-					XMLitem.securityManufacturer	= ["Manufacturer: ", $(item).find("securityManufacturer").text()];
-					XMLitem.securityModel			= ["Model: ", $(item).find("securityModel").text()];
-					XMLitem.securityCaliber			= ["Caliber: ", $(item).find("securityCaliber").text()];
-					XMLitem.securityAmmo			= ["Amount of Ammo: ", $(item).find("securityAmmo").text()];
-					XMLitem.securityPod				= ["Has Bipod/Tripod: ", $(item).find("securityPod").text()];
-					XMLitem.securityScope			= ["Has Scope: ", $(item).find("securityScope").text()];
-					XMLitem.securityRedDot			= ["Has Red-Dot Sight: ", $(item).find("securityRedDot").text()];
-					XMLitem.securityLaser			= ["Has Laser: ", $(item).find("securityLaser").text()];
-					XMLitem.securitySling			= ["Has Sling: ", $(item).find("securitySling").text()];
-					XMLitem.securityNotes			= ["Notes: ", $(item).find("secSitBI").text()];
-					window.localStorage.setItem(id, JSON.stringify(XMLitem));
-				});
-				alert("XML Loaded")
 			}
 		});
 		return false;
@@ -214,13 +176,13 @@ var displayData = function(cat) {
 	}
 	$(".results").empty();
 	for (var i = 0, j = window.localStorage.length; i < j; i++) {
-		$(".results").append("<br/>");
+		//$(".results").append("<br/>");
 		var key = window.localStorage.key(i);
 		var value = window.localStorage.getItem(key);
 		var obj = JSON.parse(value);
-		var liID = "" + (i) + "";
+		var liID = 1111 + (i);
 		var ulID = "" + key + "";
-		$(".results").append("<li id=" + liID + "></li>");
+		$(".results").append('<li id="' + liID + '">' + obj.securityManufacturer[1] + ' - ' + obj.securityModel[1] + '</li>');
 		$("#" + liID + "").append("<ul id=" + ulID + "></ul>");
 		if (obj.secSitBI[1] == "Yes" && cat == "Bug In" || obj.secSitBO[1] == "Yes" && cat == "Bug Out" || obj.secSitBI[1] == "Yes" && obj.secSitBO[1] == "Yes") {
 			var content = "";
@@ -237,6 +199,7 @@ var displayData = function(cat) {
 			);
 		}
 	};
+	$(".results").listview("refresh");
 };
 
 // Delete Item Function
