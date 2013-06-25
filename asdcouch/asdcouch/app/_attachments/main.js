@@ -49,13 +49,14 @@ $('#aboutPage').on('pageinit', function() {
 		resetFields();
 	});
 	$('#addJSON').click(function() {
+		/*
 		$.ajax({
 			url		: '_view/preps',
 			type 	: 'GET',
 			dataType: 'json',
 			success : function(data, textStatus) {
 				$.each(data.rows, function(index, preps) {
-					console.log(preps.value);
+					//console.log(preps.value);
 					var JSONkey = preps.value.JSONKEY;
 					var	JSONitem					= {};
 					JSONitem.secSitBI				= [preps.value.secSitBI[0], preps.value.secSitBI[1]];
@@ -74,6 +75,26 @@ $('#aboutPage').on('pageinit', function() {
 					window.localStorage.setItem(JSONkey, JSON.stringify(JSONitem));
 				});
 				alert("JSON Loaded");
+			}
+		});
+		return false;
+		*/
+		$.couch.db("asdproject").view("plugin/preps", {
+			success: function(data) {
+				console.log(data);
+				/*
+				$.each(data.rows, function(index, value) {
+					var couchItem = (value.value || value.doc);
+					$(".results").append(
+						$("<li>").append(
+							$("<a>")
+								.attr("href", "showPreps.html")
+								.text(item.securityManufacturer[1] + ' - ' + item.securityModel[1])
+						)
+					);
+				});
+				$(".results").listview("refresh");
+				*/
 			}
 		});
 		return false;
@@ -174,7 +195,7 @@ var displayData = function(cat) {
 	if (window.localStorage.length === 0) {
 		alert("There are no preps to display.");
 	}
-	$(".results").empty();
+	//$(".results").empty();
 	for (var i = 0, j = window.localStorage.length; i < j; i++) {
 		//$(".results").append("<br/>");
 		var key = window.localStorage.key(i);
