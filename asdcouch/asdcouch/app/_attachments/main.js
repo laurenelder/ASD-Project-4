@@ -9,11 +9,11 @@ $('#homePage').on('pageinit', function() {
 	});
 
 	$('#displayBugIn').click(function() {
-		displayData("Bug In");
+		getPreps("Yes", "", "", "");
 		$("#resultsHeader").html("Displaying Bug In Preps...");
 	});
 	$('#displayBugOut').click(function() {
-		displayData("Bug Out");
+		getPreps("", "Yes", "", "");
 		$("#resultsHeader").html("Displaying Bug Out Preps...");
 	});
 });
@@ -41,6 +41,16 @@ $('#Setup').on('pageinit', function() {
 	$('.delete').click(function() {
 		var dButton = $(this).data("key");
 		deleteItem(dButton);
+	});
+	$('.listDetails').click(function() {
+		console.log(this);
+		var urlData = $(this).attr("href");
+		var detailKey = urlData.slice(29);
+		var strDetailKey = detailKey.stringify();
+		console.log(detailKey);
+		console.log(strDetailKey)
+		getPreps("", "", strDetailKey, "");
+		//getUrlKey(this);
 	});
 });
 
@@ -79,27 +89,57 @@ $('#aboutPage').on('pageinit', function() {
 		});
 		return false;
 		*/
-		$.couch.db("asdproject").view("plugin/preps", {
+		$.couch.db("asdproject").view("asdproject/preps", {
 			success: function(data) {
 				console.log(data);
-				/*
 				$.each(data.rows, function(index, value) {
 					var couchItem = (value.value || value.doc);
 					$(".results").append(
 						$("<li>").append(
-							$("<a>")
-								.attr("href", "showPreps.html")
-								.text(item.securityManufacturer[1] + ' - ' + item.securityModel[1])
+							$('<a class="listDetails">')
+								.attr("href", "prepdetails.html?prepdetails=" + couchItem.JSONKEY)
+								.text(couchItem.securityManufacturer[1] + ' - ' + couchItem.securityModel[1])
 						)
 					);
 				});
 				$(".results").listview("refresh");
-				*/
 			}
 		});
-		return false;
 	});
 });
+
+// Map Reduce Function
+var getPreps = function(BIhomeButton, BOhomeButton, prepDetailPage, editFields) {
+	console.log(prepDetailPage);
+	$.couch.db("asdproject").view("asdproject/preps", {
+		success: function(data) {
+			$.each(data.rows, function(index, value) {
+				var couchItem = (value.value || value.doc);
+				if (BIhomeButton   == couchItem.secSitBI[1] ||
+					BOhomeButton   == couchItem.secSitBO[1]) {
+					displayData(couchItem);
+				}
+				if (prepDetailPage == couchItem.JSONKEY) {
+					displayDetailData(couchItem);
+					console.log(couchItem.JSONKEY);
+				}
+				if (editFields	   == couchItem.JSONKEY) {
+					editItem(couchItem)
+				}
+			});
+		}
+	});
+};
+
+// Get Key From Url Function
+var getUrlKey = function(url) {
+	console.log(url);
+	var urlData = $(url).attr("href");
+	var detailKey = urlData.slice(29);
+	var strDetailKey = detailKey.stringify();
+	console.log(strDetailKey)
+	getPreps("", "", strDetailKey);
+};
 
 // Clear Fields Function
 var resetFields = function() {
@@ -191,36 +231,36 @@ var editItem = function(eButton) {
 };
 
 // Display Data Function
-var displayData = function(cat) {
-	if (window.localStorage.length === 0) {
-		alert("There are no preps to display.");
-	}
-	//$(".results").empty();
-	for (var i = 0, j = window.localStorage.length; i < j; i++) {
-		//$(".results").append("<br/>");
-		var key = window.localStorage.key(i);
-		var value = window.localStorage.getItem(key);
-		var obj = JSON.parse(value);
-		var liID = 1111 + (i);
-		var ulID = key;
-		$(".results").append('<li id="' + liID + '">' + obj.securityManufacturer[1] + ' - ' + obj.securityModel[1] + '</li>');
-		$("#" + liID + "").append("<ul id=" + ulID + "></ul>");
-		if (obj.secSitBI[1] == "Yes" && cat == "Bug In" || obj.secSitBO[1] == "Yes" && cat == "Bug Out" || obj.secSitBI[1] == "Yes" && obj.secSitBO[1] == "Yes") {
-			var content = "";
-			for (var n in obj) {
-				content += "<li>";
-				content += obj[n][0] + " " + obj[n][1];
-				content += "</li>";
-			};
-			$("#" + ulID + "").append(content);
-			$("#" + ulID + "").append(
-				"<li><a href='#securityPage' data-role='button' data-key='" + ulID + "' class='edit'>Edit Prep</a></li>" 
-				+ 
-				"<li><a href='#homePage' data-role='button' data-key='" + ulID + "' class='delete'>Delete Prep</a></li>"
-			);
-		}
-	};
+var displayData = function(listviewData) {
+	$(".results").append(
+		$("<li></li>").append(
+			$('<a class="listDetails"></a>')
+				.attr("href", "prepdetails.html?prepdetails=" + listviewData.JSONKEY)
+				.text(listviewData.securityManufacturer[1] + ' - ' + listviewData.securityModel[1])
+			)
+		);
 	$(".results").listview("refresh");
+};
+
+// Display Details Function
+var displayDetailData = function(detailData) {
+	console.log(detailData);
+	$("#showDetails")
+		.append("<li>" + detailData.secSitBI[0] + detailData.secSitBI[1] + "</li>")
+		.append("<li>" + detailData.securityWeaponType[0] + detailData.securityWeaponType[1] + "</li>")
+		.append("<li>" + detailData.securityManufacturer[0] + detailData.securityManufacturer[1] + "</li>")
+		.append("<li>" + detailData.securityModel[0] + detailData.securityModel[1] + "</li>")
+		.append("<li>" + detailData.securityCaliber[0] + detailData.securityCaliber[1] + "</li>")
+		.append("<li>" + detailData.securityAmmo[0] + detailData.securityAmmo[1] + "</li>")
+		.append("<li>" + detailData.securityPod[0] + detailData.securityPod[1] + "</li>")
+		.append("<li>" + detailData.securityScope[0] + detailData.securityScope[1] + "</li>")
+		.append("<li>" + detailData.securityRedDot[0] + detailData.securityRedDot[1] + "</li>")
+		.append("<li>" + detailData.securityLaser[0] + detailData.securityLaser[1] + "</li>")
+		.append("<li>" + detailData.securitySling[0] + detailData.securitySling[1] + "</li>")
+		.append("<li>" + detailData.securityNotes[0] + detailData.securityNotes[1] + "</li>")
+		.append("<li>" + detailData.secSitBI[0] + detailData.secSitBI[1] + "</li>")
+		.append("<li>" + detailData.secSitBI[0] + detailData.secSitBI[1] + "</li>")
+	$("#showDetails").listview("refresh");
 };
 
 // Delete Item Function
