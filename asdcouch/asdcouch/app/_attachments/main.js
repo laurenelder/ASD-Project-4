@@ -25,6 +25,9 @@ $('#securityPage').on('pageinit', function() {
 	$('#securitySubmit').click(function() {
 		storeData();
 	});
+	$(".input").focus(function() {
+		$(this).css("color", "#000000");
+	});
 });
 
 $('#Setup').on('pageinit', function() {
@@ -143,6 +146,7 @@ var getUrlKey = function(url) {
 
 // Clear Fields Function
 var resetFields = function() {
+	$(".input").css("color", "#CFCFCF");
 	$('#securityForm')[0].reset();
 };
 
