@@ -23,7 +23,23 @@ $('#securityPage').on('pageinit', function() {
 		resetFields();
 	});
 	$('#securitySubmit').click(function() {
-		storeData();
+		$(".securityForm").validate({
+			rules: {
+				securityManufacturer: "required",
+				securityModel: "required",
+				checkbox: "required"
+			},
+			messages: {
+				securityManufacturer: "Please Provide the Manufacturer of the Weapon.",
+				securityModel: "Please Provide the Model of the Weapon.",
+				checkbox: "Please Indicate the Situation of use for the Weapon."
+			},
+			submitHandler: function(form) {
+				form.submit(function() {
+					storedata()
+				});
+			}
+		});
 	});
 	$(".input").focus(function() {
 		$(this).css("color", "#000000");
@@ -112,11 +128,13 @@ $('#aboutPage').on('pageinit', function() {
 });
 
 // Map Reduce Function
-var getPreps = function(BIhomeButton, BOhomeButton, prepDetailPage, editFields) {
+var getPreps = function(BIhomeButton, BOhomeButton, prepDetailPage, editFields, deleteDoc) {
 	console.log(prepDetailPage);
 	$.couch.db("asdproject").view("asdproject/preps", {
 		success: function(data) {
 			$.each(data.rows, function(index, value) {
+				console.log(index);
+				console.log(value);
 				var couchItem = (value.value || value.doc);
 				if (BIhomeButton   == couchItem.secSitBI[1] ||
 					BOhomeButton   == couchItem.secSitBO[1]) {
@@ -127,7 +145,10 @@ var getPreps = function(BIhomeButton, BOhomeButton, prepDetailPage, editFields) 
 					console.log(couchItem.JSONKEY);
 				}
 				if (editFields	   == couchItem.JSONKEY) {
-					editItem(couchItem)
+					editItem(couchItem);
+				}
+				if (deleteDoc == couchItem.JSONKEY) {
+					deleteItem(couchItem);
 				}
 			});
 		}
@@ -170,7 +191,8 @@ var clearStorage = function() {
 };
 
 // Store Data Function
-var storeData = function(key) {
+var storeData = function(form, key) {
+	console.log(form);
 	if (!key) {
 		var id				= Math.floor(Math.random() * 1000001);
 	} else {
@@ -195,42 +217,40 @@ var storeData = function(key) {
 	alert("Prep Saved!")
 };
 
+
+
 // Edit Item Function
-var editItem = function(eButton) {
-	console.log(eButton);
-	var newKey = eButton;
-	var editValue = window.localStorage.getItem(newKey);
-	var eItem = JSON.parse(editValue);
-	$("#securityWeaponType").val(eItem.securityWeaponType[1]);
-	$("#securityManufacturer").val(eItem.securityManufacturer[1]);
-	$("#securityModel").val(eItem.securityModel[1]);
-	$("#securityCaliber").val(eItem.securityCaliber[1]);
-	$("#securityAmmo").val(eItem.securityAmmo[1]);
-	if (eItem.secSitBI[1] == "Yes") {
+var editItem = function(eButtonValue) {
+	var newValue = eButtonValue;
+	$("#securityWeaponType").val(newValue.securityWeaponType[1]);
+	$("#securityManufacturer").val(newValue.securityManufacturer[1]);
+	$("#securityModel").val(newValue.securityModel[1]);
+	$("#securityCaliber").val(newValue.securityCaliber[1]);
+	$("#securityAmmo").val(newValue.securityAmmo[1]);
+	if (newValue.secSitBI[1] == "Yes") {
 		$("#secSitBI").prop("checked", true);
 	};
-	if (eItem.secSitBO[1] == "Yes") {
+	if (newValue.secSitBO[1] == "Yes") {
 		$("#secSitBO").prop("checked", true);
 	};
-	if (eItem.securityPod[1] == "Yes") {
+	if (newValue.securityPod[1] == "Yes") {
 		$("#securityPod").prop("checked", true);
 	};
-	if (eItem.securityScope[1] == "Yes") {
+	if (enewValueItem.securityScope[1] == "Yes") {
 		$("#securityScope").prop("checked", true);
 	};
-	if (eItem.securityRedDot[1] == "Yes") {
+	if (newValue.securityRedDot[1] == "Yes") {
 		$("#securityRedDot").prop("checked", true);
 	};
-	if (eItem.securityLaser[1] == "Yes") {
+	if (newValue.securityLaser[1] == "Yes") {
 		$("#securityLaser").prop("checked", true);
 	};
-	if (eItem.securitySling[1] == "Yes") {
+	if (newValue.securitySling[1] == "Yes") {
 		$("#securitySling").prop("checked", true);
 	};
-	$("#securityNotes").val(eItem.securityNotes[1]);
+	$("#securityNotes").val(newValue.securityNotes[1]);
 	$("#securitySubmit").click(function() {
-		storeData(newKey);
-		console.log(newKey);
+		storeData(newValue.JSONKEY);
 	});
 };
 
@@ -238,9 +258,7 @@ var editItem = function(eButton) {
 var displayData = function(listviewData) {
 	$(".results").append(
 		$("<li></li>").append(
-			$('<a class="listDetails"></a>')
-				.attr("href", "prepdetails.html?prepdetails=" + listviewData.JSONKEY)
-				.text(listviewData.securityManufacturer[1] + ' - ' + listviewData.securityModel[1])
+			$('<a href="prepdetails.html?prepdetails="' + listviewData.JSONKEY + ' class="listDetails">' + listviewData.securityManufacturer[1] + ' - ' + listviewData.securityModel[1] + '</a>')
 			)
 		);
 	$(".results").listview("refresh");
@@ -268,7 +286,7 @@ var displayDetailData = function(detailData) {
 };
 
 // Delete Item Function
-var deleteItem = function(dButton) {
+var deleteItem = function(dButtonValue) {
 	var ask = confirm("Delete Prep?");
 	if (ask) {
 		window.localStorage.removeItem(dButton);
