@@ -9,37 +9,22 @@ $('#homePage').on('pageinit', function() {
 	});
 
 	$('#displayBugIn').click(function() {
-		getPreps("Yes", "", "", "");
+		getPreps("Yes", "", "", "", "");
 		$("#resultsHeader").html("Displaying Bug In Preps...");
 	});
 	$('#displayBugOut').click(function() {
-		getPreps("", "Yes", "", "");
+		getPreps("", "Yes", "", "", "");
 		$("#resultsHeader").html("Displaying Bug Out Preps...");
 	});
 });
 
 $('#securityPage').on('pageinit', function() {
+
 	$('#SecurityPage').click(function() {
 		resetFields();
 	});
 	$('#securitySubmit').click(function() {
-		$(".securityForm").validate({
-			rules: {
-				securityManufacturer: "required",
-				securityModel: "required",
-				checkbox: "required"
-			},
-			messages: {
-				securityManufacturer: "Please Provide the Manufacturer of the Weapon.",
-				securityModel: "Please Provide the Model of the Weapon.",
-				checkbox: "Please Indicate the Situation of use for the Weapon."
-			},
-			submitHandler: function(form) {
-				form.submit(function() {
-					storedata()
-				});
-			}
-		});
+		storeData();
 	});
 	$(".input").focus(function() {
 		$(this).css("color", "#000000");
@@ -53,77 +38,31 @@ $('#Setup').on('pageinit', function() {
 	$('#clearLoc1').click(function() {
 		clearStorage();
 	});
+	$('.listDetails').click(function() {
+		alert("Bitch I'm Working!!!");
+		var gotKey = $(this).data("key");
+		getPreps("", "", gotKey, "", "");
+	});
+});
+
+$('#prepdetails').on('pageinit', function() {
+
+	$('#SecurityPage').click(function() {
+		resetFields();
+	});
 	$('.edit').click(function() {
 		var eButton = $(this).data("key");
-		editItem(eButton);
+		getPreps("", "", "", eButton, "");
 	});
 	$('.delete').click(function() {
 		var dButton = $(this).data("key");
-		deleteItem(dButton);
-	});
-	$('.listDetails').click(function() {
-		console.log(this);
-		var urlData = $(this).attr("href");
-		var detailKey = urlData.slice(29);
-		var strDetailKey = detailKey.stringify();
-		console.log(detailKey);
-		console.log(strDetailKey)
-		getPreps("", "", strDetailKey, "");
-		//getUrlKey(this);
+		getPreps("", "", "", "", dButton);
 	});
 });
 
 $('#aboutPage').on('pageinit', function() {
 	$('#SecurityPage').click(function() {
 		resetFields();
-	});
-	$('#addJSON').click(function() {
-		/*
-		$.ajax({
-			url		: '_view/preps',
-			type 	: 'GET',
-			dataType: 'json',
-			success : function(data, textStatus) {
-				$.each(data.rows, function(index, preps) {
-					//console.log(preps.value);
-					var JSONkey = preps.value.JSONKEY;
-					var	JSONitem					= {};
-					JSONitem.secSitBI				= [preps.value.secSitBI[0], preps.value.secSitBI[1]];
-					JSONitem.secSitBO				= [preps.value.secSitBO[0], preps.value.secSitBO[1]];
-					JSONitem.securityWeaponType		= [preps.value.securityWeaponType[0], preps.value.securityWeaponType[1]];
-					JSONitem.securityManufacturer	= [preps.value.securityManufacturer[0], preps.value.securityManufacturer[1]];
-					JSONitem.securityModel			= [preps.value.securityModel[0], preps.value.securityModel[1]];
-					JSONitem.securityCaliber		= [preps.value.securityCaliber[0], preps.value.securityCaliber[1]];
-					JSONitem.securityAmmo			= [preps.value.securityAmmo[0], preps.value.securityAmmo[1]];
-					JSONitem.securityPod			= [preps.value.securityPod[0], preps.value.securityPod[1]];
-					JSONitem.securityScope			= [preps.value.securityScope[0], preps.value.securityScope[1]];
-					JSONitem.securityRedDot			= [preps.value.securityRedDot[0], preps.value.securityRedDot[1]];
-					JSONitem.securityLaser			= [preps.value.securityLaser[0], preps.value.securityLaser[1]];
-					JSONitem.securitySling			= [preps.value.securitySling[0], preps.value.securitySling[1]];
-					JSONitem.securityNotes			= [preps.value.securityNotes[0], preps.value.securityNotes[1]];
-					window.localStorage.setItem(JSONkey, JSON.stringify(JSONitem));
-				});
-				alert("JSON Loaded");
-			}
-		});
-		return false;
-		*/
-		$.couch.db("asdproject").view("asdproject/preps", {
-			success: function(data) {
-				console.log(data);
-				$.each(data.rows, function(index, value) {
-					var couchItem = (value.value || value.doc);
-					$(".results").append(
-						$("<li>").append(
-							$('<a class="listDetails">')
-								.attr("href", "prepdetails.html?prepdetails=" + couchItem.JSONKEY)
-								.text(couchItem.securityManufacturer[1] + ' - ' + couchItem.securityModel[1])
-						)
-					);
-				});
-				$(".results").listview("refresh");
-			}
-		});
 	});
 });
 
@@ -133,8 +72,6 @@ var getPreps = function(BIhomeButton, BOhomeButton, prepDetailPage, editFields, 
 	$.couch.db("asdproject").view("asdproject/preps", {
 		success: function(data) {
 			$.each(data.rows, function(index, value) {
-				console.log(index);
-				console.log(value);
 				var couchItem = (value.value || value.doc);
 				if (BIhomeButton   == couchItem.secSitBI[1] ||
 					BOhomeButton   == couchItem.secSitBO[1]) {
@@ -191,30 +128,35 @@ var clearStorage = function() {
 };
 
 // Store Data Function
-var storeData = function(form, key) {
-	console.log(form);
-	if (!key) {
-		var id				= Math.floor(Math.random() * 1000001);
+var storeData = function(storekey) {
+	if (!storekey) {
+		var id				= "prep:" + Math.floor(Math.random() * 10001) + "";
 	} else {
-		var id = key;
+		var id = "prep:" + storekey + "";
 	}
 	$(":input:checkbox:checked").val("Yes");
-	var	item					= {};
-	item.secSitBI				= ["Bug In Weapon: ", $("#secSitBI").val()];
-	item.secSitBO				= ["Bug Out Weapon: ", $("#secSitBO").val()];
-	item.securityWeaponType		= ["Weapon Type: ", $("#securityWeaponType").val()];
-	item.securityManufacturer	= ["Manufacturer: ", $("#securityManufacturer").val()];
-	item.securityModel			= ["Model: ", $("#securityModel").val()];
-	item.securityCaliber		= ["Caliber: ", $("#securityCaliber").val()];
-	item.securityAmmo			= ["Amount of Ammo: ", $("#securityAmmo").val()];
-	item.securityPod			= ["Has Bipod/Tripod: ", $("#securityPod").val()];
-	item.securityScope			= ["Has Scope: ", $("#securityScope").val()];
-	item.securityRedDot			= ["Has Red-Dot Sight: ", $("#securityRedDot").val()];
-	item.securityLaser			= ["Has Laser: ", $("#securityLaser").val()];
-	item.securitySling			= ["Has Sling: ", $("#securitySling").val()];
-	item.securityNotes			= ["Notes: ", $("#securityNotes").val()];
-	window.localStorage.setItem(id, JSON.stringify(item));
-	alert("Prep Saved!")
+	var	doc						= {};
+	doc._id 					= id;
+	var newJsonKey 				= id.slice(5);
+	doc.JSONKEY 				= newJsonKey;
+	doc.secSitBI				= ["Bug In Weapon: ", $("#secSitBI").val()];
+	doc.secSitBO				= ["Bug Out Weapon: ", $("#secSitBO").val()];
+	doc.securityWeaponType		= ["Weapon Type: ", $("#securityWeaponType").val()];
+	doc.securityManufacturer	= ["Manufacturer: ", $("#securityManufacturer").val()];
+	doc.securityModel			= ["Model: ", $("#securityModel").val()];
+	doc.securityCaliber			= ["Caliber: ", $("#securityCaliber").val()];
+	doc.securityAmmo			= ["Amount of Ammo: ", $("#securityAmmo").val()];
+	doc.securityPod				= ["Has Bipod/Tripod: ", $("#securityPod").val()];
+	doc.securityScope			= ["Has Scope: ", $("#securityScope").val()];
+	doc.securityRedDot			= ["Has Red-Dot Sight: ", $("#securityRedDot").val()];
+	doc.securityLaser			= ["Has Laser: ", $("#securityLaser").val()];
+	doc.securitySling			= ["Has Sling: ", $("#securitySling").val()];
+	doc.securityNotes			= ["Notes: ", $("#securityNotes").val()];
+	console.log(doc);
+//	$.couch.db("asdproject").saveDoc(doc, {
+//		success: alert("Prep Saved!")
+//	}); 
+	alert("Prep Saved!");
 };
 
 
@@ -256,32 +198,34 @@ var editItem = function(eButtonValue) {
 
 // Display Data Function
 var displayData = function(listviewData) {
+	var newListViewData = listviewData;
 	$(".results").append(
-		$("<li></li>").append(
-			$('<a href="prepdetails.html?prepdetails="' + listviewData.JSONKEY + ' class="listDetails">' + listviewData.securityManufacturer[1] + ' - ' + listviewData.securityModel[1] + '</a>')
-			)
-		);
+		$("<li>").append(
+			$('<a href="#prepdetails" class="listDetails" data-key"' + newListViewData.JSONKEY + '">' + newListViewData.securityManufacturer[1] + ' - ' + newListViewData.securityModel[1] + '</a>')
+		)
+	);
 	$(".results").listview("refresh");
 };
 
 // Display Details Function
 var displayDetailData = function(detailData) {
+	var myNewDetailedData = detailData;
 	console.log(detailData);
 	$("#showDetails")
-		.append("<li>" + detailData.secSitBI[0] + detailData.secSitBI[1] + "</li>")
-		.append("<li>" + detailData.securityWeaponType[0] + detailData.securityWeaponType[1] + "</li>")
-		.append("<li>" + detailData.securityManufacturer[0] + detailData.securityManufacturer[1] + "</li>")
-		.append("<li>" + detailData.securityModel[0] + detailData.securityModel[1] + "</li>")
-		.append("<li>" + detailData.securityCaliber[0] + detailData.securityCaliber[1] + "</li>")
-		.append("<li>" + detailData.securityAmmo[0] + detailData.securityAmmo[1] + "</li>")
-		.append("<li>" + detailData.securityPod[0] + detailData.securityPod[1] + "</li>")
-		.append("<li>" + detailData.securityScope[0] + detailData.securityScope[1] + "</li>")
-		.append("<li>" + detailData.securityRedDot[0] + detailData.securityRedDot[1] + "</li>")
-		.append("<li>" + detailData.securityLaser[0] + detailData.securityLaser[1] + "</li>")
-		.append("<li>" + detailData.securitySling[0] + detailData.securitySling[1] + "</li>")
-		.append("<li>" + detailData.securityNotes[0] + detailData.securityNotes[1] + "</li>")
-		.append("<li>" + detailData.secSitBI[0] + detailData.secSitBI[1] + "</li>")
-		.append("<li>" + detailData.secSitBI[0] + detailData.secSitBI[1] + "</li>")
+		.append("<li>" + myNewDetailedData.secSitBI[0] + myNewDetailedData.secSitBI[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securityWeaponType[0] + myNewDetailedData.securityWeaponType[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securityManufacturer[0] + myNewDetailedData.securityManufacturer[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securityModel[0] + myNewDetailedData.securityModel[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securityCaliber[0] + myNewDetailedData.securityCaliber[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securityAmmo[0] + myNewDetailedData.securityAmmo[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securityPod[0] + myNewDetailedData.securityPod[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securityScope[0] + myNewDetailedData.securityScope[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securityRedDot[0] + myNewDetailedData.securityRedDot[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securityLaser[0] + myNewDetailedData.securityLaser[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securitySling[0] + myNewDetailedData.securitySling[1] + "</li>")
+		.append("<li>" + myNewDetailedData.securityNotes[0] + myNewDetailedData.securityNotes[1] + "</li>")
+		.append('<a class="edit" data-role="button" data-key="' + myNewDetailedData.JSONKEY + '">Edit Prep</a>')
+		.append('<a class="delete" data-role="button" data-key="' + myNewDetailedData.JSONKEY + '">Delete Prep</a>')
 	$("#showDetails").listview("refresh");
 };
 
