@@ -1,6 +1,7 @@
 function(doc) {
   if (doc._id.substr(0,5) === "prep:") {
     emit(doc._id, {
+    	"revised": doc._rev,
     	"JSONKEY": doc._id.substr(5,7),
     	"secSitBI": doc.secSitBI,
     	"secSitBO": doc.secSitBO,

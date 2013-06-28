@@ -1,25 +1,27 @@
 // Devin "Lauren" Elder
 // ASD Term 1306
 // ASD Application
-// 06/20/2013
+// 06/27/2013
 
+$.mobile.page.prototype.options.domCache = false;
 $('#homePage').on('pageinit', function() {
 	$('#SecurityPage').click(function() {
 		resetFields();
 	});
 
 	$('#displayBugIn').click(function() {
+		$("#results").empty();
 		getPreps("Yes", "", "", "", "");
 		$("#resultsHeader").html("Displaying Bug In Preps...");
 	});
 	$('#displayBugOut').click(function() {
+		$("#results").empty();
 		getPreps("", "Yes", "", "", "");
 		$("#resultsHeader").html("Displaying Bug Out Preps...");
 	});
 });
 
 $('#securityPage').on('pageinit', function() {
-
 	$('#SecurityPage').click(function() {
 		resetFields();
 	});
@@ -38,8 +40,7 @@ $('#Setup').on('pageinit', function() {
 	$('#clearLoc1').click(function() {
 		clearStorage();
 	});
-	$('.listDetails').click(function() {
-		alert("Bitch I'm Working!!!");
+	$(document).on("click", ".listDetails", function() {
 		var gotKey = $(this).data("key");
 		getPreps("", "", gotKey, "", "");
 	});
@@ -50,11 +51,11 @@ $('#prepdetails').on('pageinit', function() {
 	$('#SecurityPage').click(function() {
 		resetFields();
 	});
-	$('.edit').click(function() {
+	$(document).on("click", ".edit", function() {
 		var eButton = $(this).data("key");
 		getPreps("", "", "", eButton, "");
 	});
-	$('.delete').click(function() {
+	$(document).on("click", ".delete", function() {
 		var dButton = $(this).data("key");
 		getPreps("", "", "", "", dButton);
 	});
@@ -68,7 +69,6 @@ $('#aboutPage').on('pageinit', function() {
 
 // Map Reduce Function
 var getPreps = function(BIhomeButton, BOhomeButton, prepDetailPage, editFields, deleteDoc) {
-	console.log(prepDetailPage);
 	$.couch.db("asdproject").view("asdproject/preps", {
 		success: function(data) {
 			$.each(data.rows, function(index, value) {
@@ -79,7 +79,6 @@ var getPreps = function(BIhomeButton, BOhomeButton, prepDetailPage, editFields, 
 				}
 				if (prepDetailPage == couchItem.JSONKEY) {
 					displayDetailData(couchItem);
-					console.log(couchItem.JSONKEY);
 				}
 				if (editFields	   == couchItem.JSONKEY) {
 					editItem(couchItem);
@@ -90,16 +89,6 @@ var getPreps = function(BIhomeButton, BOhomeButton, prepDetailPage, editFields, 
 			});
 		}
 	});
-};
-
-// Get Key From Url Function
-var getUrlKey = function(url) {
-	console.log(url);
-	var urlData = $(url).attr("href");
-	var detailKey = urlData.slice(29);
-	var strDetailKey = detailKey.stringify();
-	console.log(strDetailKey)
-	getPreps("", "", strDetailKey);
 };
 
 // Clear Fields Function
@@ -128,7 +117,7 @@ var clearStorage = function() {
 };
 
 // Store Data Function
-var storeData = function(storekey) {
+var storeData = function(storekey, revision) {
 	if (!storekey) {
 		var id				= "prep:" + Math.floor(Math.random() * 10001) + "";
 	} else {
@@ -137,6 +126,7 @@ var storeData = function(storekey) {
 	$(":input:checkbox:checked").val("Yes");
 	var	doc						= {};
 	doc._id 					= id;
+	doc._rev 					= revision
 	var newJsonKey 				= id.slice(5);
 	doc.JSONKEY 				= newJsonKey;
 	doc.secSitBI				= ["Bug In Weapon: ", $("#secSitBI").val()];
@@ -152,47 +142,48 @@ var storeData = function(storekey) {
 	doc.securityLaser			= ["Has Laser: ", $("#securityLaser").val()];
 	doc.securitySling			= ["Has Sling: ", $("#securitySling").val()];
 	doc.securityNotes			= ["Notes: ", $("#securityNotes").val()];
-	console.log(doc);
-//	$.couch.db("asdproject").saveDoc(doc, {
-//		success: alert("Prep Saved!")
-//	}); 
-	alert("Prep Saved!");
+	console.log(id);
+	$.couch.db("asdproject").saveDoc(doc, {
+		success: function(data) {
+			alert("Prep Saved!");
+		}
+	});
 };
-
-
 
 // Edit Item Function
 var editItem = function(eButtonValue) {
-	var newValue = eButtonValue;
-	$("#securityWeaponType").val(newValue.securityWeaponType[1]);
-	$("#securityManufacturer").val(newValue.securityManufacturer[1]);
-	$("#securityModel").val(newValue.securityModel[1]);
-	$("#securityCaliber").val(newValue.securityCaliber[1]);
-	$("#securityAmmo").val(newValue.securityAmmo[1]);
-	if (newValue.secSitBI[1] == "Yes") {
+	resetFields();
+	$(".input").css("color", "#000000");
+	$("#securityWeaponType").val(eButtonValue.securityWeaponType[1]);
+	$("#securityManufacturer").val(eButtonValue.securityManufacturer[1]);
+	$("#securityModel").val(eButtonValue.securityModel[1]);
+	$("#securityCaliber").val(eButtonValue.securityCaliber[1]);
+	$("#securityAmmo").val(eButtonValue.securityAmmo[1]);
+	if (eButtonValue.secSitBI[1] == "Yes") {
 		$("#secSitBI").prop("checked", true);
 	};
-	if (newValue.secSitBO[1] == "Yes") {
+	if (eButtonValue.secSitBO[1] == "Yes") {
 		$("#secSitBO").prop("checked", true);
 	};
-	if (newValue.securityPod[1] == "Yes") {
+	if (eButtonValue.securityPod[1] == "Yes") {
 		$("#securityPod").prop("checked", true);
 	};
-	if (enewValueItem.securityScope[1] == "Yes") {
+	if (eButtonValue.securityScope[1] == "Yes") {
 		$("#securityScope").prop("checked", true);
 	};
-	if (newValue.securityRedDot[1] == "Yes") {
+	if (eButtonValue.securityRedDot[1] == "Yes") {
 		$("#securityRedDot").prop("checked", true);
 	};
-	if (newValue.securityLaser[1] == "Yes") {
+	if (eButtonValue.securityLaser[1] == "Yes") {
 		$("#securityLaser").prop("checked", true);
 	};
-	if (newValue.securitySling[1] == "Yes") {
+	if (eButtonValue.securitySling[1] == "Yes") {
 		$("#securitySling").prop("checked", true);
 	};
-	$("#securityNotes").val(newValue.securityNotes[1]);
+	$("#securityNotes").val(eButtonValue.securityNotes[1]);
 	$("#securitySubmit").click(function() {
-		storeData(newValue.JSONKEY);
+		console.log(eButtonValue.JSONKEY);
+		storeData(eButtonValue.JSONKEY, eButtonValue.revised);
 	});
 };
 
@@ -201,7 +192,7 @@ var displayData = function(listviewData) {
 	var newListViewData = listviewData;
 	$(".results").append(
 		$("<li>").append(
-			$('<a href="#prepdetails" class="listDetails" data-key"' + newListViewData.JSONKEY + '">' + newListViewData.securityManufacturer[1] + ' - ' + newListViewData.securityModel[1] + '</a>')
+			$('<a href="#prepdetails" class="listDetails" data-key="' + newListViewData.JSONKEY + '" >' + newListViewData.securityManufacturer[1] + ' - ' + newListViewData.securityModel[1] + '</a>')
 		)
 	);
 	$(".results").listview("refresh");
@@ -210,9 +201,10 @@ var displayData = function(listviewData) {
 // Display Details Function
 var displayDetailData = function(detailData) {
 	var myNewDetailedData = detailData;
-	console.log(detailData);
+	$("#showDetails").empty();
 	$("#showDetails")
 		.append("<li>" + myNewDetailedData.secSitBI[0] + myNewDetailedData.secSitBI[1] + "</li>")
+		.append("<li>" + myNewDetailedData.secSitBO[0] + myNewDetailedData.secSitBO[1] + "</li>")
 		.append("<li>" + myNewDetailedData.securityWeaponType[0] + myNewDetailedData.securityWeaponType[1] + "</li>")
 		.append("<li>" + myNewDetailedData.securityManufacturer[0] + myNewDetailedData.securityManufacturer[1] + "</li>")
 		.append("<li>" + myNewDetailedData.securityModel[0] + myNewDetailedData.securityModel[1] + "</li>")
@@ -224,17 +216,25 @@ var displayDetailData = function(detailData) {
 		.append("<li>" + myNewDetailedData.securityLaser[0] + myNewDetailedData.securityLaser[1] + "</li>")
 		.append("<li>" + myNewDetailedData.securitySling[0] + myNewDetailedData.securitySling[1] + "</li>")
 		.append("<li>" + myNewDetailedData.securityNotes[0] + myNewDetailedData.securityNotes[1] + "</li>")
-		.append('<a class="edit" data-role="button" data-key="' + myNewDetailedData.JSONKEY + '">Edit Prep</a>')
-		.append('<a class="delete" data-role="button" data-key="' + myNewDetailedData.JSONKEY + '">Delete Prep</a>')
+		.append('<li><a href="#securityPage" class="edit" style="color:#009ACD; text-align:center;" data-role="button" data-key="' + myNewDetailedData.JSONKEY + '" >Edit Prep</a></li>')
+		.append('<li><a href="#homePage" class="delete" style="color:#E3170D; text-align:center;" data-role="button" data-key="' + myNewDetailedData.JSONKEY + '" >Delete Prep</a></li>')
 	$("#showDetails").listview("refresh");
 };
 
 // Delete Item Function
 var deleteItem = function(dButtonValue) {
-	var ask = confirm("Delete Prep?");
+	var deleteMe   = dButtonValue.JSONKEY;
+	var deleteMeId = "prep:" + deleteMe + "";
+	var deleteDoc  = {};
+	deleteDoc._id  = deleteMeId;
+	deleteDoc._rev = dButtonValue.revised;
+	var ask		   = confirm("Delete Prep?");
 	if (ask) {
-		window.localStorage.removeItem(dButton);
-		alert("Prep Deleted");
+		$.couch.db("asdproject").removeDoc(deleteDoc, {
+			success: function(data) {
+				alert("Prep Deleted");
+			}
+		});
 	} else {
 		alert("Prep Not Deleted")
 	}
